@@ -1,0 +1,18 @@
+{
+	"trailingComma": "es5",
+	"tabWidth": 4,
+	"printWidth": 120,
+	"useTabs": true,
+	"importOrder": [
+		"^@/actions",
+		"^@/lib",
+		"^@/components",
+		"^[./][^.]*$",
+		"^[./]"
+	],
+	"importOrderSeparation": false,
+	"importOrderSortSpecifiers": true,
+	"plugins": [
+		"@trivago/prettier-plugin-sort-imports"
+	]
+}
