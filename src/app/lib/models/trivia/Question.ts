@@ -5,10 +5,12 @@ interface BaseQuestion {
 }
 
 export interface TextQuestion extends BaseQuestion {
+	type: "text";
 	question: string;
 }
 
 export interface ImageQuestion extends BaseQuestion {
+	type: "image";
 	imageUri: string;
 	question?: string;
 }

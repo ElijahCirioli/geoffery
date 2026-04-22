@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 import Game from "@/lib/models/trivia/Game";
 import ListedGame from "@/lib/models/trivia/ListedGame";
 import GameSource, { ListGamesResponse } from "@/lib/sources/GameSource";
@@ -45,7 +46,14 @@ class FileSource implements GameSource {
 
 	async loadGame(id: string): Promise<Game> {
 		const file = await fs.readFile(id, "utf8");
-		return JSON.parse(file) as Game;
+		const game = JSON.parse(file) as Game;
+		return { ...game, id };
+	}
+
+	async saveGame(game: Game): Promise<void> {
+		const filePath = path.parse(game.id);
+		await fs.mkdir(filePath.dir, { recursive: true });
+		await fs.writeFile(game.id, JSON.stringify(game));
 	}
 }
 
