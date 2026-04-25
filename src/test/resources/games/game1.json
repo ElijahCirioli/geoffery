@@ -1,0 +1,141 @@
+{
+    "id": "game1",
+    "title": "Test Game 1",
+    "description": "A simple game for testing purposes",
+    "rounds": [
+        {
+            "type": "standard",
+            "categories": [
+                {
+                    "title": "Numeric Answers",
+                    "description": "The answers to all questions will be numbers.",
+                    "questions": [
+                        {
+                            "type": "text",
+                            "question": "What is 3 times 5?",
+                            "answer": "15",
+                            "isDouble": false
+                        },
+                        {
+                            "type": "text",
+                            "question": "How many sides are on a standard American triangle?",
+                            "answer": "3",
+                            "isDouble": false
+                        },
+                        {
+                            "type": "text",
+                            "question": "In what year did the Titanic sink?",
+                            "answer": "1912",
+                            "isDouble": false
+                        }
+                    ]
+                },
+                {
+                    "title": "People",
+                    "description": "People of some significance.",
+                    "questions": [
+                        {
+                            "type": "text",
+                            "question": "Who was the second president of the United States?",
+                            "answer": "John Adams",
+                            "isDouble": true
+                        },
+                        {
+                            "type": "text",
+                            "question": "Who invented the safety elevator?",
+                            "answer": "Elijah Otis",
+                            "isDouble": false
+                        },
+                        {
+                            "type": "text",
+                            "question": "Which researcher is credited with developing the first polio vaccine?",
+                            "answer": "Jonas Salk",
+                            "isDouble": false
+                        }
+                    ]
+                }
+            ],
+            "pointValues": [
+                100,
+                200
+            ]
+        },
+        {
+            "type": "standard",
+            "categories": [
+                {
+                    "title": "Geography",
+                    "questions": [
+                        {
+                            "type": "text",
+                            "question": "What is the world's largest ocean?",
+                            "answer": "The Pacific Ocean",
+                            "isDouble": false
+                        },
+                        {
+                            "type": "text",
+                            "question": "Which planet is closest to the sun?",
+                            "answer": "Mercury",
+                            "isDouble": true
+                        },
+                        {
+                            "type": "text",
+                            "question": "What is the most populous city in the United States?",
+                            "answer": "New York City",
+                            "isDouble": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Say \"cheese\"!",
+                    "description": "Questions with pictures.",
+                    "questions": [
+                        {
+                            "type": "image",
+                            "imageUri": "/src/test/resources/images/dino.jpeg",
+                            "question": "What color is the dinosaur?",
+                            "answer": "Blue",
+                            "isDouble": false,
+                            "altText": "a blue dinosaur ornament wearing a Christmas hat",
+                            "notes": [
+                                "Spikes are red"
+                            ]
+                        },
+                        {
+                            "type": "image",
+                            "imageUri": "/src/test/resources/images/dog.jpeg",
+                            "answer": "Woof",
+                            "isDouble": false,
+                            "altText": "Close up dog"
+                        },
+                        {
+                            "type": "image",
+                            "imageUri": "/src/test/resources/images/snowman.jpeg",
+                            "question": "Why is he so sad?",
+                            "answer": "Parents are getting divorced",
+                            "isDouble": true,
+                            "notes": [
+                                "And it's his fault"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "pointValues": [
+                200,
+                400
+            ]
+        },
+        {
+            "type": "questionWager",
+            "categoryTitle": "Famous Landmarks",
+            "question": {
+                "type": "image",
+                "imageUri": "/src/test/resources/images/rocks.jpeg",
+                "question": "Which prehistoric monument is pictured here?",
+                "answer": "Stonehenge",
+                "isDouble": false
+            }
+        }
+    ]
+}

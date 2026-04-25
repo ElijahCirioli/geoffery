@@ -17,25 +17,29 @@ class FileSource implements GameSource {
 	async listGames(paginationToken?: string): Promise<ListGamesResponse> {
 		// List all JSON files recursively in the configured directory
 		const allFilePaths = await fs.readdir(this.directory, { recursive: true });
-		const jsonFilePaths = allFilePaths.filter((path) => path.endsWith(".json")).toSorted();
+		const jsonFilePaths = allFilePaths
+			.filter((relativePath) => relativePath.endsWith(".json"))
+			.toSorted()
+			.map((relativePath) => relativePath.replaceAll(path.win32.sep, path.posix.sep));
 
 		// Extract a single page out of the total list of files
 		const paginationIndex = paginationToken ? jsonFilePaths.indexOf(paginationToken) : 0;
 		if (paginationIndex === -1) {
 			return { games: [] };
 		}
-		const pageFilePaths = jsonFilePaths.slice(paginationIndex + 1, paginationIndex + this.MAX_RESULTS + 1);
-		const nextPaginationToken =
-			paginationIndex + this.MAX_RESULTS < jsonFilePaths.length ? pageFilePaths.at(-1) : undefined;
+		const pageFilePaths = jsonFilePaths.slice(paginationIndex, paginationIndex + this.MAX_RESULTS);
+		const nextPaginationToken = jsonFilePaths.at(paginationIndex + this.MAX_RESULTS);
 
 		// Read in the files and parse as JSON
-		const filePromises = pageFilePaths.map((path) => fs.readFile(path, "utf8"));
+		const filePromises = pageFilePaths.map((relativePath) => {
+			const filePath = this.resolvePath(relativePath);
+			return fs.readFile(filePath, "utf8");
+		});
 		const files = await Promise.all(filePromises);
 		const games = files.map((file, i) => {
 			const game = JSON.parse(file) as ListedGame;
-			const gameFilePath = pageFilePaths[i];
-			// Replace the Game's ID with its file path so we can load it more easily
-			return { ...game, id: gameFilePath };
+			// Replace the Game's ID with its relative file path so we can load it more easily
+			return { ...game, id: pageFilePaths[i] };
 		});
 
 		return {
@@ -45,15 +49,23 @@ class FileSource implements GameSource {
 	}
 
 	async loadGame(id: string): Promise<Game> {
-		const file = await fs.readFile(id, "utf8");
+		const filePath = this.resolvePath(id);
+		const file = await fs.readFile(filePath, "utf8");
 		const game = JSON.parse(file) as Game;
 		return { ...game, id };
 	}
 
 	async saveGame(game: Game): Promise<void> {
-		const filePath = path.parse(game.id);
-		await fs.mkdir(filePath.dir, { recursive: true });
-		await fs.writeFile(game.id, JSON.stringify(game));
+		let filePath = this.resolvePath(game.id);
+		if (!filePath.endsWith(".json")) {
+			filePath = `${filePath}.json`;
+		}
+		await fs.mkdir(path.dirname(filePath), { recursive: true });
+		await fs.writeFile(filePath, JSON.stringify(game, null, 4));
+	}
+
+	resolvePath(relativePath: string): string {
+		return path.join(this.directory, relativePath);
 	}
 }
 

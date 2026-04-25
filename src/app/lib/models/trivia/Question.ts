@@ -13,6 +13,7 @@ export interface ImageQuestion extends BaseQuestion {
 	type: "image";
 	imageUri: string;
 	question?: string;
+	altText?: string;
 }
 
 type Question = TextQuestion | ImageQuestion;

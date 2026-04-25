@@ -9,6 +9,8 @@ export interface StandardRound {
 
 export interface QuestionWagerRound {
 	type: "questionWager";
+	categoryTitle: string;
+	categoryDescription?: string;
 	question: Question;
 }
 

@@ -17,6 +17,7 @@ export const imageQuestion: fc.Arbitrary<ImageQuestion> = fc.record({
 	type: fc.constant("image"),
 	imageUri: fc.string(),
 	question: fc.option(fc.string()),
+	altText: fc.option(fc.string()),
 	answer: fc.string(),
 	isDouble: fc.boolean(),
 	notes: fc.option(fc.array(fc.string(), { minLength: 0, maxLength: 10 })),
@@ -37,6 +38,8 @@ export const standardRound: fc.Arbitrary<StandardRound> = fc.record({
 
 export const questionWagerRound: fc.Arbitrary<QuestionWagerRound> = fc.record({
 	type: fc.constant("questionWager"),
+	categoryTitle: fc.string(),
+	categoryDescription: fc.option(fc.string()),
 	question: question,
 });
 
