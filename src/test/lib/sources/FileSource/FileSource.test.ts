@@ -2,10 +2,21 @@ import TestGames from "@test/objects/TestGames";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { afterEach, beforeEach } from "vitest";
+import { it as baseIt, describe, expect } from "vitest";
 import Game from "@/lib/models/trivia/Game";
 import FileSource from "@/lib/sources/FileSource/FileSource";
+
+const it = baseIt.extend("sourceWithTempDir", async ({}, { onCleanup }) => {
+	// It would be cooler to use mkdtempDisposable(), but it is still very new so I will wait for wider support
+	const tempDirPath = await mkdtemp(path.join(tmpdir(), "FileSourceTest"));
+	const source = new FileSource(tempDirPath);
+
+	onCleanup(async () => {
+		await rm(tempDirPath, { recursive: true, force: true });
+	});
+
+	return source;
+});
 
 describe("listGames", () => {
 	it("returns fewer than 10 games in a single page", async () => {
@@ -59,7 +70,7 @@ describe("listGames", () => {
 		const source = new FileSource(path.join(__dirname, "../../../resources/junk"));
 		const listGamesResponse = source.listGames();
 
-		expect(listGamesResponse).rejects.toThrow();
+		await expect(listGamesResponse).rejects.toThrow();
 	});
 });
 
@@ -84,73 +95,57 @@ describe("loadGame", () => {
 		const source = new FileSource(path.join(__dirname, "../../../resources/games"));
 		const loadGameResponse = source.loadGame("fake.json");
 
-		expect(loadGameResponse).rejects.toThrow();
+		await expect(loadGameResponse).rejects.toThrow();
 	});
 
 	it("returns an error when loading file that is not valid json", async () => {
 		const source = new FileSource(path.join(__dirname, "../../../resources/junk"));
 		const loadGameResponse = source.loadGame("invalid.json");
 
-		expect(loadGameResponse).rejects.toThrow();
+		await expect(loadGameResponse).rejects.toThrow();
 	});
 });
 
 describe("saveGame", () => {
-	let tempDirPath: string;
-
-	beforeEach(async () => {
-		// It would be cooler to use mkdtempDisposable(), but it is still very new so I will wait for wider support
-		tempDirPath = await mkdtemp(path.join(tmpdir(), "FileSourceTest"));
-	});
-
-	afterEach(async () => {
-		if (tempDirPath === undefined) return;
-		await rm(tempDirPath, { recursive: true, force: true });
-	});
-
-	it("saves a game to a file and allows reading it again", async () => {
-		const source = new FileSource(tempDirPath);
+	it("saves a game to a file and allows reading it again", async ({ sourceWithTempDir }) => {
 		const game = { ...TestGames.game1, id: "game1.json" };
 
-		await source.saveGame(game);
-		const loadGameResponse = await source.loadGame(game.id);
+		await sourceWithTempDir.saveGame(game);
+		const loadGameResponse = await sourceWithTempDir.loadGame(game.id);
 
 		expect(loadGameResponse).toMatchObject(game);
 	});
 
-	it("appends json file extension to game ID when saving it", async () => {
-		const source = new FileSource(tempDirPath);
+	it("appends json file extension to game ID when saving it", async ({ sourceWithTempDir }) => {
 		const game = { ...TestGames.game1 };
 		const expectedGame = { ...game, id: "game1.json" };
 
-		await source.saveGame(game);
-		const loadGameResponse = await source.loadGame(expectedGame.id);
+		await sourceWithTempDir.saveGame(game);
+		const loadGameResponse = await sourceWithTempDir.loadGame(expectedGame.id);
 
 		expect(loadGameResponse).toMatchObject(expectedGame);
 	});
 
-	it("creates nested directories to place file in", async () => {
-		const source = new FileSource(tempDirPath);
+	it("creates nested directories to place file in", async ({ sourceWithTempDir }) => {
 		const game = { ...TestGames.game1, id: "nested/group/game1.json" };
 
-		await source.saveGame(game);
-		const loadGameResponse = await source.loadGame(game.id);
+		await sourceWithTempDir.saveGame(game);
+		const loadGameResponse = await sourceWithTempDir.loadGame(game.id);
 
 		expect(loadGameResponse).toMatchObject(game);
 	});
 
-	it("overwrites an existing file with new data", async () => {
-		const source = new FileSource(tempDirPath);
+	it("overwrites an existing file with new data", async ({ sourceWithTempDir }) => {
 		const game1 = { ...TestGames.game1, id: "game1.json" };
 		const game2 = { ...TestGames.game2, id: "game1.json" };
 
-		await source.saveGame(game1);
-		const loadGameResponse1 = await source.loadGame(game1.id);
+		await sourceWithTempDir.saveGame(game1);
+		const loadGameResponse1 = await sourceWithTempDir.loadGame(game1.id);
 
 		expect(loadGameResponse1).toMatchObject(game1);
 
-		await source.saveGame(game2);
-		const loadGameResponse2 = await source.loadGame(game2.id);
+		await sourceWithTempDir.saveGame(game2);
+		const loadGameResponse2 = await sourceWithTempDir.loadGame(game2.id);
 
 		expect(loadGameResponse2).toMatchObject(game2);
 	});

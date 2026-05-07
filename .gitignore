@@ -19,10 +19,13 @@
 
 # production
 /build
+/.cache
 
 # misc
 .DS_Store
 *.pem
+src/app/lib/sources/JxvSource
+src/test/lib/sources/JxvSource
 
 # debug
 npm-debug.log*
