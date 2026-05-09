@@ -15,7 +15,7 @@ export const textQuestion: fc.Arbitrary<TextQuestion> = fc.record({
 
 export const imageQuestion: fc.Arbitrary<ImageQuestion> = fc.record({
 	type: fc.constant("image"),
-	imageUri: fc.string(),
+	imageUris: fc.array(fc.string(), { minLength: 1, maxLength: 4 }),
 	question: fc.option(fc.string()),
 	altText: fc.option(fc.string()),
 	answer: fc.string(),

@@ -11,7 +11,7 @@ export interface TextQuestion extends BaseQuestion {
 
 export interface ImageQuestion extends BaseQuestion {
 	type: "image";
-	imageUri: string;
+	imageUris: string[];
 	question?: string;
 	altText?: string;
 }
