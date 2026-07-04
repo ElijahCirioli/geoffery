@@ -76,7 +76,7 @@ const textQuestion10: TextQuestion = {
 
 const imageQuestion1: ImageQuestion = {
 	type: "image",
-	imageUri: "/src/test/resources/images/dino.jpeg",
+	imageUris: ["/src/test/resources/images/dino.jpeg"],
 	question: "What color is the dinosaur?",
 	answer: "Blue",
 	isDouble: false,
@@ -86,7 +86,7 @@ const imageQuestion1: ImageQuestion = {
 
 const imageQuestion2: ImageQuestion = {
 	type: "image",
-	imageUri: "/src/test/resources/images/dog.jpeg",
+	imageUris: ["/src/test/resources/images/dog.jpeg"],
 	answer: "Woof",
 	isDouble: false,
 	altText: "Close up dog",
@@ -94,7 +94,7 @@ const imageQuestion2: ImageQuestion = {
 
 const imageQuestion3: ImageQuestion = {
 	type: "image",
-	imageUri: "/src/test/resources/images/snowman.jpeg",
+	imageUris: ["/src/test/resources/images/snowman.jpeg"],
 	question: "Why is he so sad?",
 	answer: "Parents are getting divorced",
 	isDouble: true,
@@ -103,7 +103,7 @@ const imageQuestion3: ImageQuestion = {
 
 const imageQuestion4: ImageQuestion = {
 	type: "image",
-	imageUri: "/src/test/resources/images/rocks.jpeg",
+	imageUris: ["/src/test/resources/images/rocks.jpeg"],
 	question: "Which prehistoric monument is pictured here?",
 	answer: "Stonehenge",
 	isDouble: false,
