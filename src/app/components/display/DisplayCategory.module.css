@@ -5,7 +5,7 @@
 	justify-content: flex-start;
 	align-items: center;
 	flex: 1;
-	gap: 0.4em;
+	gap: 0.5em;
 	height: 100%;
 	max-width: 100%;
 	min-width: 0;
@@ -18,17 +18,20 @@
 	height: 100%;
 	text-align: center;
 	align-content: center;
+	position: relative;
+	overflow: hidden;
 }
 
 .tile:first-child {
-	margin-bottom: 0.4em;
+	margin-bottom: 0.5em;
 }
 
 .tile > h1 {
 	color: var(--white-color);
 	font-size: 2.5em;
-	overflow-wrap: break-word;
-	margin: 0 0.2em;
+	overflow-wrap: normal;
+	margin: 0;
+	padding: 0 0.2em;
 	text-shadow: 2px 3px 0 var(--black-color);
 	letter-spacing: 0.02em;
 	line-height: 1.2em;
@@ -41,4 +44,20 @@
 	font-weight: 800;
 	margin: 0;
 	text-shadow: 5px 4px 0 var(--black-color);
+}
+
+.measuringText {
+	visibility: hidden;
+	width: fit-content;
+	position: absolute;
+	top: 0;
+}
+
+.tile > h1.smallTitle {
+	font-size: 2em;
+}
+
+.tile > h1.extraSmallTitle {
+	font-size: 1.8em;
+	overflow-wrap: break-word;
 }
